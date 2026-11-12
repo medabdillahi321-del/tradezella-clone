@@ -1,0 +1,38 @@
+# Daily time windows, in local wall-clock time with IANA zone names.
+# Daylight saving time is handled by the zone, never by a fixed offset.
+#
+# status:
+#   approved    = you have confirmed this value
+#   provisional = a placeholder; replace it with the source-defined value
+#                 before any rule depends on it
+
+[window.operating]
+name = "Operating window"
+zone = "America/New_York"
+start = "09:00"
+end = "12:00"
+status = "approved"
+
+# The session definitions below are common market-hours placeholders,
+# NOT Yarimi definitions. They exist so the plumbing can be tested.
+
+[window.asia]
+name = "Asia session"
+zone = "Asia/Tokyo"
+start = "09:00"
+end = "15:00"
+status = "provisional"
+
+[window.london]
+name = "London session"
+zone = "Europe/London"
+start = "08:00"
+end = "16:30"
+status = "provisional"
+
+[window.new_york]
+name = "New York session"
+zone = "America/New_York"
+start = "08:00"
+end = "17:00"
+status = "provisional"
