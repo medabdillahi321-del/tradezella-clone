@@ -41,6 +41,9 @@ python -m unittest discover -s tests -t .
 | `fxsystem/quality.py` | Live NO TRADE gate for each price, and the end-of-day data audit |
 | `scripts/check_quality.py` | Print and log the data quality report for a trading day |
 | `config/quality.toml` | Data-quality limits (all provisional) |
+| `fxsystem/dukascopy.py` | Downloads and decodes Dukascopy hourly tick files; slow, cached, stops when refused |
+| `fxsystem/crosscheck.py` | Compares two price sources minute by minute (mid price, spreads side by side) |
+| `scripts/crosscheck.py` | OANDA vs Dukascopy for a day's operating window or any UTC range |
 | `config/sessions.toml` | Daily windows in local time; each marked `approved` or `provisional` |
 | `scripts/check_env.py` | Milestone 0 readiness check |
 | `tests/` | Tests, including both daylight-saving changes in the US and the UK |

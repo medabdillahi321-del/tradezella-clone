@@ -15,7 +15,7 @@
 | 2 | Storage (local log first, then Supabase) | Done locally. Supabase table written, not applied |
 | 3 | OANDA price recorder | Done. Live test: complete bars within 0.1 pip of OANDA candles |
 | 4 | Data quality checker | Done. Live NO TRADE gate and end-of-day audit; real recording audited clean |
-| 5 | Cross-check feed (Dukascopy or a second broker) | Not started |
+| 5 | Cross-check feed (Dukascopy) | Code done and tested on sample data. Not yet run on real Dukascopy data: it refuses this cloud network. Run `python scripts/crosscheck.py --day <date>` on your own computer |
 | 6 | History loader and replay runner | Not started |
 | 7 | Risk engine | Not started |
 | 8 | Shadow simulator | Not started |
@@ -40,5 +40,9 @@
   0.50-2.00. Review them once you have a few weeks of recordings.
 
 ## Open checks
+- Dukascopy blocks requests from the cloud computer (connection reset, HTTP 429). Expected to work
+  from your own computer. The file layout the code assumes is from memory and is confirmed only
+  once a real file has been decoded.
+- Dukascopy's terms of use for its free historical data have not been read yet.
 - OANDA price stream (stream-fxpractice.oanda.com) needs its own key entry before the recorder can run in the cloud.
 - Whether a separate OANDA token can be limited to one account, for the later execution service.
