@@ -32,6 +32,9 @@ python -m unittest discover -s tests -t .
 |---|---|
 | `fxsystem/clock.py` | Time conversion, sessions, trading day (17:00 New York), market hours |
 | `fxsystem/oanda_read.py` | Read-only OANDA client: practice hosts, GET requests and read endpoints only |
+| `fxsystem/storage.py` | Local event log (SQLite): written first, append-only, hash-chained, no duplicates |
+| `fxsystem/sync.py` | Copies the local log to Supabase; safe to retry, loses nothing while Supabase is down |
+| `supabase/migrations/001_events.sql` | The matching Supabase table, append-only. Not applied yet |
 | `config/sessions.toml` | Daily windows in local time; each marked `approved` or `provisional` |
 | `scripts/check_env.py` | Milestone 0 readiness check |
 | `tests/` | Tests, including both daylight-saving changes in the US and the UK |

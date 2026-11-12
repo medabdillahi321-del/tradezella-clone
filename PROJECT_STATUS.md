@@ -12,7 +12,7 @@
 |---|---|---|
 | 0 | Computer and OANDA check | Done. Practice API connected and EUR/USD prices read |
 | 1 | Clock and sessions | Done, 22 tests passing |
-| 2 | Storage (local log first, then Supabase) | Not started |
+| 2 | Storage (local log first, then Supabase) | Done locally, 21 tests passing. Supabase table written, not applied |
 | 3 | OANDA price recorder | Not started (read-only client and its 6 tests done) |
 | 4 | Data quality checker | Not started |
 | 5 | Cross-check feed (Dukascopy or a second broker) | Not started |
@@ -31,6 +31,9 @@
   `provisional`, not source-defined values.
 - **Four trades at 0.25% equals the 1.00% daily limit.** Four losses plus costs reach the shutdown
   exactly. Confirm this is intended.
+
+- **Supabase project:** the free plan should be enough to start. Applying
+  `supabase/migrations/001_events.sql` needs your go-ahead.
 
 ## Open checks
 - OANDA price stream (stream-fxpractice.oanda.com) needs its own key entry before the recorder can run in the cloud.
