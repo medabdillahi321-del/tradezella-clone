@@ -38,6 +38,9 @@ python -m unittest discover -s tests -t .
 | `fxsystem/recorder.py` | Records every price to daily files and builds 1-minute bid/ask bars |
 | `scripts/record.py` | Run the recorder (`--minutes N` to stop after N minutes) |
 | `scripts/compare_bars.py` | Compare recorded bars with OANDA's own 1-minute candles |
+| `fxsystem/quality.py` | Live NO TRADE gate for each price, and the end-of-day data audit |
+| `scripts/check_quality.py` | Print and log the data quality report for a trading day |
+| `config/quality.toml` | Data-quality limits (all provisional) |
 | `config/sessions.toml` | Daily windows in local time; each marked `approved` or `provisional` |
 | `scripts/check_env.py` | Milestone 0 readiness check |
 | `tests/` | Tests, including both daylight-saving changes in the US and the UK |

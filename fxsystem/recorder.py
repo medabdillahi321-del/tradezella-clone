@@ -160,6 +160,7 @@ class Recorder:
         now: Callable[[], datetime] = lambda: datetime.now(UTC),
         sleep: Callable[[float], None] = _time.sleep,
         max_backoff: float = 60.0,
+        gate=None,
     ) -> None:
         self.log = log
         self.instrument = instrument
@@ -168,6 +169,7 @@ class Recorder:
         self.now = now
         self.sleep = sleep
         self.max_backoff = max_backoff
+        self.gate = gate  # optional QuoteGate, fed every price and heartbeat
         self.bar: Bar | None = None
         self.last_tick_time: datetime | None = None
         self.last_server_time: datetime | None = None
@@ -186,7 +188,10 @@ class Recorder:
             self._partial_minute = connected_minute
         if kind == "HEARTBEAT":
             self.stats["heartbeats"] += 1
-            self._advance(parse_oanda_time(msg["time"]))
+            hb_time = parse_oanda_time(msg["time"])
+            if self.gate:
+                self.gate.on_heartbeat(hb_time)
+            self._advance(hb_time)
         elif kind == "PRICE":
             if msg.get("instrument", self.instrument) != self.instrument:
                 return
@@ -195,6 +200,8 @@ class Recorder:
                 self.stats["duplicates"] += 1  # repeated after a reconnect
                 return
             self._advance(t.time)
+            if self.gate:
+                self.gate.on_tick(t)
             self.ticks.write(t)
             self.stats["ticks"] += 1
             self.last_tick_time = t.time

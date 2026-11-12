@@ -14,7 +14,7 @@
 | 1 | Clock and sessions | Done |
 | 2 | Storage (local log first, then Supabase) | Done locally. Supabase table written, not applied |
 | 3 | OANDA price recorder | Done. Live test: complete bars within 0.1 pip of OANDA candles |
-| 4 | Data quality checker | Not started |
+| 4 | Data quality checker | Done. Live NO TRADE gate and end-of-day audit; real recording audited clean |
 | 5 | Cross-check feed (Dukascopy or a second broker) | Not started |
 | 6 | History loader and replay runner | Not started |
 | 7 | Risk engine | Not started |
@@ -34,6 +34,10 @@
 
 - **Supabase project:** the free plan should be enough to start. Applying
   `supabase/migrations/001_events.sql` needs your go-ahead.
+
+- **Data-quality limits** in `config/quality.toml` are provisional starting points: stale after 10 s,
+  frozen after 120 s, spread above 3.0 pips, spike above 15 pips (then 60 s pause), price outside
+  0.50-2.00. Review them once you have a few weeks of recordings.
 
 ## Open checks
 - OANDA price stream (stream-fxpractice.oanda.com) needs its own key entry before the recorder can run in the cloud.

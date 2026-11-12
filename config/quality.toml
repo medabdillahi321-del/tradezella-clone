@@ -1,0 +1,24 @@
+# Data-quality limits for EUR/USD. Any limit broken means NO TRADE.
+# All values are provisional: starting points to review against your recordings.
+
+[eur_usd]
+pip = 0.0001
+
+# No price or heartbeat from OANDA for this long: the feed is stale.
+# OANDA sends a heartbeat every 5 seconds, so 10 seconds means two were missed.
+stale_after_s = 10
+
+# Bid and ask both unchanged for this long while the market is open: the price is frozen.
+frozen_after_s = 120
+
+# Spread wider than this: too expensive or unusual to trade.
+max_spread_pips = 3.0
+
+# The mid price jumps more than this between two consecutive prices: a spike.
+spike_pips = 15.0
+# After a spike, keep refusing trades for this long.
+spike_cooldown_s = 60
+
+# Prices outside this range are treated as bad data.
+min_price = 0.50
+max_price = 2.00
