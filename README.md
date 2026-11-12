@@ -7,6 +7,16 @@ orders**: the OANDA client only allows read requests to the practice servers.
 Needs Python 3.11 or newer and nothing else (no `pip install`).
 On Windows, if the time-zone check fails, run `python -m pip install tzdata` once.
 
+## Start it
+
+```
+python scripts/launch.py
+```
+
+Records live EUR/USD prices from OANDA, runs the live data check and the health monitor, and
+prints one status line a minute. Ctrl+C stops it and prints the day's data quality. It does
+not trade. Your computer must stay awake and online while it runs.
+
 ## Check your computer
 
 ```
@@ -59,6 +69,7 @@ python -m unittest discover -s tests -t .
 | `fxsystem/monitor.py` | Health checks and alerts; turns the kill switch on for serious problems in the window |
 | `scripts/monitor.py` | Run the monitor (`--once` for a single check) |
 | `config/monitor.toml` | Monitor limits (provisional) |
+| `scripts/launch.py` | Start the live system: recorder, data check and health monitor together |
 | `config/sessions.toml` | Daily windows in local time; each marked `approved` or `provisional` |
 | `scripts/check_env.py` | Milestone 0 readiness check |
 | `tests/` | Tests, including both daylight-saving changes in the US and the UK |
