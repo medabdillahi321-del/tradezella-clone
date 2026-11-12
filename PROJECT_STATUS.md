@@ -18,7 +18,7 @@
 | 5 | Cross-check feed (Dukascopy) | Done. Real check, 11 Nov 09:00-10:00 New York: 60 of 60 minutes, mid prices within 0.25 pip, no minutes flagged |
 | 6 | History loader and replay runner | Done. 4 weeks of real OANDA history (31,508 bars) replayed twice with identical results |
 | 7 | Risk engine | Done. 0.25% sizing, 4-trade cap, 1% daily shutdown, worst-case check, 20+ NO TRADE guards, kill switch |
-| 8 | Shadow simulator | Not started |
+| 8 | Shadow simulator | Done. Full pipeline on 4 weeks of real history: daily cap and 1% limit held, runs repeatable |
 | 9 | Quant Terminal export | Not started |
 | 10 | Journal importer | Not started |
 | 11 | Health monitor and kill switch | Not started |
@@ -48,6 +48,10 @@
 - Inside 09:00-12:00 New York: every minute present (3,960 = 22 days x 180), median spread 1.6 pips,
   95% of minutes at 1.7 or below, widest 2.6. Never above the 3.0-pip limit.
 - Wide spreads cluster at the 17:00 New York rollover (707 of 714 bars), outside the window.
+
+- **Close trades by a set time?** Without it, virtual trades can run past 12:00 and through the
+  17:00 New York rollover (widest spreads) into the next day. Option built (`--flat-at 12:00`),
+  off by default. Your choice, ideally from the strategy rules.
 
 ## Open checks
 - Dukascopy refuses the cloud computer and timed out once for the script on your laptop, while
