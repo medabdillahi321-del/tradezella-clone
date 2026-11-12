@@ -10,7 +10,7 @@
 ## Milestones
 | # | Milestone | Status |
 |---|---|---|
-| 0 | Computer and OANDA check | Script done. Waiting for your OANDA practice token |
+| 0 | Computer and OANDA check | Done. Practice API connected and EUR/USD prices read |
 | 1 | Clock and sessions | Done, 22 tests passing |
 | 2 | Storage (local log first, then Supabase) | Not started |
 | 3 | OANDA price recorder | Not started (read-only client and its 6 tests done) |
@@ -33,5 +33,5 @@
   exactly. Confirm this is intended.
 
 ## Open checks
-- OANDA practice account available in your country.
+- OANDA price stream (stream-fxpractice.oanda.com) needs its own key entry before the recorder can run in the cloud.
 - Whether a separate OANDA token can be limited to one account, for the later execution service.
