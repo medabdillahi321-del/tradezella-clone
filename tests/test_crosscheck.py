@@ -42,7 +42,8 @@ class TestDefaultFetch(unittest.TestCase):
         import urllib.error
         from unittest import mock
         from fxsystem import dukascopy
-        for exc in (urllib.error.URLError(ConnectionResetError(104, "reset")), ConnectionResetError(104, "reset")):
+        for exc in (urllib.error.URLError(ConnectionResetError(104, "reset")), ConnectionResetError(104, "reset"),
+                    TimeoutError("The read operation timed out"), urllib.error.URLError(TimeoutError("timed out"))):
             with mock.patch.object(dukascopy.urllib.request, "urlopen", side_effect=exc):
                 with self.assertRaises(RateLimited):
                     dukascopy._default_fetch("https://datafeed.dukascopy.com/x")

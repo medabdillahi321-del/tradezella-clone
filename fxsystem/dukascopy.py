@@ -39,7 +39,7 @@ SCALE = {"EURUSD": Decimal(100000)}
 
 
 class RateLimited(RuntimeError):
-    """Dukascopy refused the request. Stop and try again much later."""
+    """Dukascopy refused or did not answer. Stop and try again much later."""
 
 
 def hour_url(symbol: str, hour: datetime) -> str:
@@ -91,9 +91,13 @@ def _default_fetch(url: str) -> bytes:
     except urllib.error.URLError as e:
         if isinstance(e.reason, ConnectionResetError):
             raise RateLimited("Dukascopy reset the connection (it may be blocking this network)") from e
+        if isinstance(e.reason, TimeoutError):
+            raise RateLimited("Dukascopy did not answer within 30 seconds") from e
         raise
     except ConnectionResetError as e:
         raise RateLimited("Dukascopy reset the connection (it may be blocking this network)") from e
+    except TimeoutError as e:  # socket.timeout is TimeoutError since Python 3.10
+        raise RateLimited("Dukascopy did not answer within 30 seconds") from e
 
 
 class DukascopyCache:
