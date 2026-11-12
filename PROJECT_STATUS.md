@@ -16,7 +16,7 @@
 | 3 | OANDA price recorder | Done. Live test: complete bars within 0.1 pip of OANDA candles |
 | 4 | Data quality checker | Done. Live NO TRADE gate and end-of-day audit; real recording audited clean |
 | 5 | Cross-check feed (Dukascopy) | Done. Real check, 11 Nov 09:00-10:00 New York: 60 of 60 minutes, mid prices within 0.25 pip, no minutes flagged |
-| 6 | History loader and replay runner | Not started |
+| 6 | History loader and replay runner | Done. 4 weeks of real OANDA history (31,508 bars) replayed twice with identical results |
 | 7 | Risk engine | Not started |
 | 8 | Shadow simulator | Not started |
 | 9 | Quant Terminal export | Not started |
@@ -38,6 +38,11 @@
 - **Data-quality limits** in `config/quality.toml` are provisional starting points: stale after 10 s,
   frozen after 120 s, spread above 3.0 pips, spike above 15 pips (then 60 s pause), price outside
   0.50-2.00. Review them once you have a few weeks of recordings.
+
+## Findings from 4 weeks of OANDA history (13 Oct - 11 Nov 2026)
+- Inside 09:00-12:00 New York: every minute present (3,960 = 22 days x 180), median spread 1.6 pips,
+  95% of minutes at 1.7 or below, widest 2.6. Never above the 3.0-pip limit.
+- Wide spreads cluster at the 17:00 New York rollover (707 of 714 bars), outside the window.
 
 ## Open checks
 - Dukascopy refuses the cloud computer and timed out once for the script on your laptop, while

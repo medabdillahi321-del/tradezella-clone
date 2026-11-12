@@ -44,6 +44,10 @@ python -m unittest discover -s tests -t .
 | `fxsystem/dukascopy.py` | Downloads and decodes Dukascopy hourly tick files; slow, cached, stops when refused |
 | `fxsystem/crosscheck.py` | Compares two price sources minute by minute (mid price, spreads side by side) |
 | `scripts/crosscheck.py` | OANDA vs Dukascopy for a day's operating window or any UTC range |
+| `fxsystem/history.py` | Downloads OANDA 1-minute bid/ask history into daily files, with checksums |
+| `fxsystem/replay.py` | Replay runner, the strategy slot, and the placeholder "plumbing-test" strategy |
+| `scripts/load_history.py` | Download history for a range of trading days |
+| `scripts/replay.py` | Replay saved history; same input always gives the same fingerprint |
 | `config/sessions.toml` | Daily windows in local time; each marked `approved` or `provisional` |
 | `scripts/check_env.py` | Milestone 0 readiness check |
 | `tests/` | Tests, including both daylight-saving changes in the US and the UK |
