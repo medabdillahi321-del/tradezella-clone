@@ -53,6 +53,9 @@ python -m unittest discover -s tests -t .
 | `config/risk.toml` | Risk limits, each marked approved, default or provisional |
 | `fxsystem/shadow.py` | Shadow simulator: virtual account, fills at real bid/ask, partials, conservative rules |
 | `scripts/shadow_replay.py` | History through strategy, data check, risk engine and simulator |
+| `fxsystem/qt_export.py` | Exports a shadow run for Quant Terminal: bars, trade markers, signal, trade list |
+| `scripts/export_quant_terminal.py` | Export the latest (or a chosen) shadow run; see HOW_TO_OPEN.txt in the output |
+| `scripts/check_qt_indicator.mjs` | Checks a generated indicator file with Node.js, without running Quant Terminal |
 | `config/sessions.toml` | Daily windows in local time; each marked `approved` or `provisional` |
 | `scripts/check_env.py` | Milestone 0 readiness check |
 | `tests/` | Tests, including both daylight-saving changes in the US and the UK |

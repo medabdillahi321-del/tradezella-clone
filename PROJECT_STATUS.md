@@ -19,7 +19,7 @@
 | 6 | History loader and replay runner | Done. 4 weeks of real OANDA history (31,508 bars) replayed twice with identical results |
 | 7 | Risk engine | Done. 0.25% sizing, 4-trade cap, 1% daily shutdown, worst-case check, 20+ NO TRADE guards, kill switch |
 | 8 | Shadow simulator | Done. Full pipeline on 4 weeks of real history: daily cap and 1% limit held, runs repeatable |
-| 9 | Quant Terminal export | Not started |
+| 9 | Quant Terminal export | Done. Bars, trade markers, signal and trade list; indicator checked in Node.js. Still to open in Quant Terminal on your laptop |
 | 10 | Journal importer | Not started |
 | 11 | Health monitor and kill switch | Not started |
 | 12 | AI review, Claude audits, demo execution | Not started; needs approved strategy rules |
