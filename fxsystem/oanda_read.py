@@ -17,7 +17,7 @@ import os
 import re
 import urllib.parse
 import urllib.request
-from typing import Callable
+from typing import Callable, Iterable, Iterator
 
 PRACTICE_REST = "https://api-fxpractice.oanda.com"
 PRACTICE_STREAM = "https://stream-fxpractice.oanda.com"
@@ -39,11 +39,19 @@ class NotAllowed(PermissionError):
 
 
 Transport = Callable[[urllib.request.Request, float], bytes]
+StreamTransport = Callable[[urllib.request.Request, float], Iterable[bytes]]
 
 
 def _default_transport(req: urllib.request.Request, timeout: float) -> bytes:
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read()
+
+
+def _default_stream_transport(req: urllib.request.Request, timeout: float) -> Iterator[bytes]:
+    # timeout applies to each read: OANDA sends a heartbeat every 5 seconds, so a
+    # read that waits longer than `timeout` means the stream has gone quiet.
+    with urllib.request.urlopen(req, timeout=timeout) as resp:
+        yield from resp
 
 
 class OandaReader:
@@ -53,6 +61,7 @@ class OandaReader:
         host: str = PRACTICE_REST,
         transport: Transport = _default_transport,
         timeout: float = 10.0,
+        stream_transport: StreamTransport = _default_stream_transport,
     ) -> None:
         if host not in ALLOWED_HOSTS:
             raise NotAllowed(f"Only the OANDA practice hosts are allowed, not {host}")
@@ -62,26 +71,41 @@ class OandaReader:
         self._token = token
         self.host = host
         self._transport = transport
+        self._stream_transport = stream_transport
         self.timeout = timeout
 
     def __repr__(self) -> str:  # never show the token
         return f"OandaReader(host={self.host!r})"
 
-    def get(self, path: str, params: dict[str, str] | None = None) -> dict:
+    def _request(self, host: str, path: str, params: dict[str, str] | None) -> urllib.request.Request:
         if not any(p.match(path) for p in ALLOWED_PATHS):
             raise NotAllowed(f"Endpoint is not on the read-only list: {path}")
         query = ""
         if params:
             query = "?" + urllib.parse.urlencode(params)
-        req = urllib.request.Request(
-            f"{self.host}{path}{query}",
+        return urllib.request.Request(
+            f"{host}{path}{query}",
             method="GET",
             headers={
                 "Authorization": f"Bearer {self._token}",
                 "Accept-Datetime-Format": "RFC3339",
             },
         )
-        return json.loads(self._transport(req, self.timeout))
+
+    def get(self, path: str, params: dict[str, str] | None = None) -> dict:
+        if path.endswith("/stream"):
+            raise NotAllowed("Use stream() for streaming endpoints")
+        return json.loads(self._transport(self._request(self.host, path, params), self.timeout))
+
+    def stream(self, path: str, params: dict[str, str] | None = None) -> Iterator[dict]:
+        """Yield messages from a streaming endpoint, one per line, from the practice stream host."""
+        if not path.endswith("/stream"):
+            raise NotAllowed("stream() is only for streaming endpoints")
+        req = self._request(PRACTICE_STREAM, path, params)
+        for line in self._stream_transport(req, self.timeout):
+            line = line.strip()
+            if line:
+                yield json.loads(line)
 
     def accounts(self) -> list[dict]:
         return self.get("/v3/accounts").get("accounts", [])

@@ -35,6 +35,9 @@ python -m unittest discover -s tests -t .
 | `fxsystem/storage.py` | Local event log (SQLite): written first, append-only, hash-chained, no duplicates |
 | `fxsystem/sync.py` | Copies the local log to Supabase; safe to retry, loses nothing while Supabase is down |
 | `supabase/migrations/001_events.sql` | The matching Supabase table, append-only. Not applied yet |
+| `fxsystem/recorder.py` | Records every price to daily files and builds 1-minute bid/ask bars |
+| `scripts/record.py` | Run the recorder (`--minutes N` to stop after N minutes) |
+| `scripts/compare_bars.py` | Compare recorded bars with OANDA's own 1-minute candles |
 | `config/sessions.toml` | Daily windows in local time; each marked `approved` or `provisional` |
 | `scripts/check_env.py` | Milestone 0 readiness check |
 | `tests/` | Tests, including both daylight-saving changes in the US and the UK |

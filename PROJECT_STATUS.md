@@ -11,9 +11,9 @@
 | # | Milestone | Status |
 |---|---|---|
 | 0 | Computer and OANDA check | Done. Practice API connected and EUR/USD prices read |
-| 1 | Clock and sessions | Done, 22 tests passing |
-| 2 | Storage (local log first, then Supabase) | Done locally, 21 tests passing. Supabase table written, not applied |
-| 3 | OANDA price recorder | Not started (read-only client and its 6 tests done) |
+| 1 | Clock and sessions | Done |
+| 2 | Storage (local log first, then Supabase) | Done locally. Supabase table written, not applied |
+| 3 | OANDA price recorder | Done. Live test: complete bars within 0.1 pip of OANDA candles |
 | 4 | Data quality checker | Not started |
 | 5 | Cross-check feed (Dukascopy or a second broker) | Not started |
 | 6 | History loader and replay runner | Not started |
