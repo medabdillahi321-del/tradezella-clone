@@ -14,7 +14,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT))
 
 from fxsystem.clock import load_windows  # noqa: E402
 from fxsystem.crosscheck import bars_from_ticks, compare, oanda_candles_to_bars  # noqa: E402
-from fxsystem.dukascopy import DukascopyCache, RateLimited  # noqa: E402
+from fxsystem.dukascopy import DukascopyCache, RateLimited, hour_url  # noqa: E402
 from fxsystem.oanda_read import OandaReader  # noqa: E402
 from fxsystem.storage import LocalLog  # noqa: E402
 
@@ -35,6 +35,8 @@ def main() -> int:
     ap.add_argument("--from", dest="start", help="UTC start, e.g. 2026-11-11T14:00")
     ap.add_argument("--to", dest="end", help="UTC end")
     ap.add_argument("--data", default=str(ROOT / "data"))
+    ap.add_argument("--list-files", action="store_true",
+                    help="only list the Dukascopy files needed and where to save them (for downloading in a browser)")
     a = ap.parse_args()
 
     if a.day:
@@ -46,14 +48,27 @@ def main() -> int:
         ap.error("give --day, or --from and --to")
 
     iso = lambda d: d.strftime("%Y-%m-%dT%H:%M:%SZ")  # noqa: E731
+    cache = DukascopyCache(a.data)
+
+    if a.list_files:
+        print("Download each link in your browser and save it under the name shown.\n"
+              "Files already in place are marked done.\n")
+        h = start.replace(minute=0, second=0, microsecond=0)
+        while h < end:
+            p = cache.path_for(h)
+            done = "done  " if p.exists() else "needed"
+            print(f"{done}  {hour_url('EURUSD', h)}\n        save as: {p}\n")
+            h += timedelta(hours=1)
+        return 0
     candles = OandaReader().get("/v3/instruments/EUR_USD/candles",
                                 {"granularity": "M1", "price": "BA", "from": iso(start), "to": iso(end)})["candles"]
     oanda = oanda_candles_to_bars(candles)
 
     try:
-        duka = bars_from_ticks(DukascopyCache(a.data).ticks(start, end))
+        duka = bars_from_ticks(cache.ticks(start, end))
     except RateLimited as e:
-        print(f"Stopped: {e}. Files already downloaded are kept; run again later to continue.")
+        print(f"Stopped: {e}. Files already downloaded are kept; run again later to continue.\n"
+              f"Or download the files in your browser: run this command again with --list-files.")
         return 2
 
     report = compare(oanda, duka, "oanda", "dukascopy")
