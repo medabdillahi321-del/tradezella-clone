@@ -1,0 +1,18 @@
+# Health monitor settings. All values are provisional.
+
+[monitor]
+# Recording is expected during the operating window (config/sessions.toml).
+# Outside it, a stopped recorder is only reported as information.
+bar_stale_after_s = 180        # no new finished 1-minute bar for 3 minutes
+tick_stale_after_s = 30        # no new price written for 30 seconds
+max_latency_s = 5              # a price arriving more than 5 s after its OANDA time
+stream_errors_warn = 3         # this many stream errors in the last 10 minutes
+disk_warn_gb = 2.0
+disk_critical_gb = 0.5
+sync_backlog_warn = 1000       # events waiting to be copied to Supabase (if it is set up)
+
+resend_after_min = 30          # repeat an unresolved alert this often
+
+# Serious problems during the operating window turn the kill switch on automatically.
+# The monitor never turns it off: only you do, with: python scripts/kill.py off
+auto_kill = ["recorder_stopped", "prices_stale", "log_tampered"]

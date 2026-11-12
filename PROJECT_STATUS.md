@@ -21,7 +21,7 @@
 | 8 | Shadow simulator | Done. Full pipeline on 4 weeks of real history: daily cap and 1% limit held, runs repeatable |
 | 9 | Quant Terminal export | Done. Bars, trade markers, signal and trade list; indicator checked in Node.js. Still to open in Quant Terminal on your laptop |
 | 10 | Journal importer | Not started |
-| 11 | Health monitor and kill switch | Not started |
+| 11 | Health monitor and kill switch | Done. Checks, alerts (screen, log, optional Discord/Slack/Telegram), automatic kill switch on serious problems in the window |
 | 12 | AI review, Claude audits, demo execution | Not started; needs approved strategy rules |
 
 ## Needs your approval
@@ -52,6 +52,11 @@
 - **Close trades by a set time?** Without it, virtual trades can run past 12:00 and through the
   17:00 New York rollover (widest spreads) into the next day. Option built (`--flat-at 12:00`),
   off by default. Your choice, ideally from the strategy rules.
+
+- **Health monitor limits** in `config/monitor.toml` are provisional: no bar for 3 min, no price for
+  30 s, prices more than 5 s late, 3 stream errors in 10 min, disk under 2 GB / 0.5 GB.
+- **Automatic kill switch:** recorder stopped, prices stale or a tampered log during 09:00-12:00
+  turns it on. Only you turn it off. Confirm you want this.
 
 ## Open checks
 - Dukascopy refuses the cloud computer and timed out once for the script on your laptop, while

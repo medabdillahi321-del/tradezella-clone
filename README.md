@@ -56,6 +56,9 @@ python -m unittest discover -s tests -t .
 | `fxsystem/qt_export.py` | Exports a shadow run for Quant Terminal: bars, trade markers, signal, trade list |
 | `scripts/export_quant_terminal.py` | Export the latest (or a chosen) shadow run; see HOW_TO_OPEN.txt in the output |
 | `scripts/check_qt_indicator.mjs` | Checks a generated indicator file with Node.js, without running Quant Terminal |
+| `fxsystem/monitor.py` | Health checks and alerts; turns the kill switch on for serious problems in the window |
+| `scripts/monitor.py` | Run the monitor (`--once` for a single check) |
+| `config/monitor.toml` | Monitor limits (provisional) |
 | `config/sessions.toml` | Daily windows in local time; each marked `approved` or `provisional` |
 | `scripts/check_env.py` | Milestone 0 readiness check |
 | `tests/` | Tests, including both daylight-saving changes in the US and the UK |

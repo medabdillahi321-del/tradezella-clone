@@ -172,6 +172,17 @@ class LocalLog:
         rows = self.db.execute(sql + " ORDER BY seq", args).fetchall()
         return [Event(*r) for r in rows]
 
+    def last(self, kind_prefix: str) -> Event | None:
+        """The most recent event whose kind starts with kind_prefix."""
+        return self._one("WHERE kind LIKE ? ORDER BY seq DESC LIMIT 1", (kind_prefix.replace("%", r"\%") + "%",))
+
+    def count_since(self, kind_prefix: str, since: datetime) -> int:
+        """How many events of this kind were written at or after `since`."""
+        return self.db.execute(
+            "SELECT COUNT(*) FROM events WHERE kind LIKE ? AND ts_utc >= ?",
+            (kind_prefix.replace("%", r"\%") + "%", _iso(since)),
+        ).fetchone()[0]
+
     def count(self) -> int:
         return self.db.execute("SELECT COUNT(*) FROM events").fetchone()[0]
 
