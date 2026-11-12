@@ -1,0 +1,29 @@
+# Risk limits. The risk engine refuses to start a day with settings that differ
+# from the ones it started the day with (each decision records a hash of this file).
+#
+# status: approved = your decision; default = my starting value, confirm or change it;
+#         provisional = a guess to review against real data.
+
+[risk]
+risk_per_trade_pct = "0.25"           # approved: % of the equity basis risked per new trade
+max_new_trades_per_day = 4            # default (you were asked: 4 or 3)
+daily_loss_limit_pct = "1.00"         # approved: shutdown threshold, % of start-of-day equity
+# The trading day resets at 17:00 New York (default; see fxsystem/clock.py).
+
+# Equity basis for sizing: the LOWER of start-of-day equity and current equity,
+# so a losing day automatically sizes smaller. (provisional)
+equity_basis = "lower_of_day_start_and_current"
+
+slippage_allowance_pips = "0.5"       # provisional: added to every stop distance when sizing
+min_stop_pips = "3"                   # provisional: tighter stops are refused
+max_stop_pips = "50"                  # provisional: wider stops are refused
+margin_rate = "0.02"                  # from your OANDA practice accounts (50:1); re-checked live
+max_margin_use = "0.50"               # never use more than half of the available margin
+max_snapshot_age_s = 30               # account data older than this means NO TRADE
+
+account_currency = "USD"
+allowed_instruments = ["EUR_USD"]
+# Account IDs allowed to trade come from the FX_ALLOWED_ACCOUNTS environment variable
+# (comma separated), never from this file. Only OANDA practice accounts (IDs starting
+# "101-") are accepted at all.
+kill_switch_file = "KILL"             # if data/KILL exists, everything is NO TRADE

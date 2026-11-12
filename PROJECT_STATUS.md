@@ -17,7 +17,7 @@
 | 4 | Data quality checker | Done. Live NO TRADE gate and end-of-day audit; real recording audited clean |
 | 5 | Cross-check feed (Dukascopy) | Done. Real check, 11 Nov 09:00-10:00 New York: 60 of 60 minutes, mid prices within 0.25 pip, no minutes flagged |
 | 6 | History loader and replay runner | Done. 4 weeks of real OANDA history (31,508 bars) replayed twice with identical results |
-| 7 | Risk engine | Not started |
+| 7 | Risk engine | Done. 0.25% sizing, 4-trade cap, 1% daily shutdown, worst-case check, 20+ NO TRADE guards, kill switch |
 | 8 | Shadow simulator | Not started |
 | 9 | Quant Terminal export | Not started |
 | 10 | Journal importer | Not started |
@@ -29,8 +29,13 @@
   loss limit reset at this time. Built as the default; confirm or change it.
 - **Asia, London and New York session times** in `config/sessions.toml` are placeholders marked
   `provisional`, not source-defined values.
-- **Four trades at 0.25% equals the 1.00% daily limit.** Four losses plus costs reach the shutdown
-  exactly. Confirm this is intended.
+- **Four trades at 0.25% equals the 1.00% daily limit.** Built with a cap of 4 (setting in
+  `config/risk.toml`). In practice the worst-case check refuses a new trade whenever it could push
+  the day past 1%, so after three full losses (about $75 on $10,000 plus costs) a fourth full-size
+  trade is refused. Confirm 4, or choose 3.
+- **Risk settings marked provisional** in `config/risk.toml`: sizing on the lower of start-of-day
+  and current equity, 0.5-pip slippage allowance, stops between 3 and 50 pips, at most half the
+  available margin, account data at most 30 s old.
 
 - **Supabase project:** the free plan should be enough to start. Applying
   `supabase/migrations/001_events.sql` needs your go-ahead.

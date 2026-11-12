@@ -48,6 +48,9 @@ python -m unittest discover -s tests -t .
 | `fxsystem/replay.py` | Replay runner, the strategy slot, and the placeholder "plumbing-test" strategy |
 | `scripts/load_history.py` | Download history for a range of trading days |
 | `scripts/replay.py` | Replay saved history; same input always gives the same fingerprint |
+| `fxsystem/risk.py` | Risk engine: sizing, daily limits, every NO TRADE guard; fails closed |
+| `scripts/kill.py` | Kill switch: `on` stops all new trades, `off` allows them again |
+| `config/risk.toml` | Risk limits, each marked approved, default or provisional |
 | `config/sessions.toml` | Daily windows in local time; each marked `approved` or `provisional` |
 | `scripts/check_env.py` | Milestone 0 readiness check |
 | `tests/` | Tests, including both daylight-saving changes in the US and the UK |
